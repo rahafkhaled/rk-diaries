@@ -1,0 +1,8 @@
+{
+  "name": "rk-diaries",
+  "private": true,
+  "scripts": {
+    "start": "npx --yes serve dist -l 8080",
+    "preview": "python3 -m http.server 8080 --directory dist"
+  }
+}
