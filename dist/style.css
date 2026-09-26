@@ -279,3 +279,43 @@ footer{display:flex;justify-content:space-between;gap:20px;max-width:1420px;marg
   *{transition:none!important;scroll-behavior:auto!important;animation:none!important}
   #book{transition:none}
 }
+
+/* Interior palette: plum ink, silver paper and muted lilac.
+   Scoped to the inside pages so the cover and key stay untouched. */
+.page:not(.cover-page){
+  --ink:#241b2c;
+  --purple:#61416f;
+  --violet:#9279a3;
+  --lilac:#d8cce2;
+  --pink:#62446f;
+  --paper:#e9e6ed;
+  --candy-purple:linear-gradient(#80618d,#62436f 48%,#412b4d 52%,#72527e);
+  --candy-pink:linear-gradient(#f4f3f6,#d2cdd8 48%,#a39aaE 52%,#e4dfe9);
+  color:var(--ink);
+}
+.page:not(.cover-page).--left{background:linear-gradient(90deg,#e5e1e9,#f0edf2 70%,#d7d0df 94%,#a396b0)}
+.page:not(.cover-page).--right{background:linear-gradient(90deg,#ada0b9,#f0edf2 7%,#e4dfe9)}
+.page:not(.cover-page) .page-header{color:#655370;border-color:#35283e}
+.page:not(.cover-page) h2{color:#241b2c;text-shadow:3px 3px 0 #cfc3da}
+.page:not(.cover-page) .section-tag{box-shadow:3px 3px 0 #b6a6c5}
+.page:not(.cover-page) .entry-copy{color:#302536;scrollbar-color:#ab98bb transparent}
+.page:not(.cover-page) .entry-copy a{color:#62416f}
+.page:not(.cover-page) .signoff{color:#684b79}
+.page:not(.cover-page) .small-note{color:#62516e}
+.page:not(.cover-page) .page-footer{color:#6f5b7e;border-color:#bdb0c9}
+.page:not(.cover-page) .burst:before{background:radial-gradient(circle at 35% 30%,#92779f,#61416f 45%,#34223f 100%)}
+.page:not(.cover-page) .burst span{text-shadow:1px 1px 0 #28182f}
+.page:not(.cover-page) .ph{background:repeating-linear-gradient(135deg,#e8e3ee 0 10px,#dbd4e2 10px 20px);border-color:#a18bad;color:#655171}
+.page:not(.cover-page) .ph-icon{color:#8b719c}
+.page:not(.cover-page) .snap{background:#f4f2f6;box-shadow:0 0 0 1px #c8bdd2,4px 6px 0 #241b2c22,0 8px 18px #241b2c22}
+.page:not(.cover-page) .snap figcaption{color:#614b71}
+.page:not(.cover-page) .week div{border-color:#b5a5c3;color:#302536}
+.page:not(.cover-page) .week b{background:var(--candy-purple)}
+.page:not(.cover-page) .week div:nth-child(odd) b{background:var(--candy-pink);color:#35283e}
+.chaos-title{color:#eee8f4;text-shadow:2px 2px 0 #756083}
+.chaos-title span{color:#cbb8dc}
+.chaos-note{color:#684e78}
+.ending h2 em{color:#684477;text-shadow:2px 2px 0 #d1c5dc}
+.page:not(.cover-page) .entry-copy a.pill{color:#fff;border-color:#bcacca;text-shadow:0 1px 0 #35223f;box-shadow:inset 0 1px 0 #fff7,0 3px 8px #34223f33}
+.page:not(.cover-page) .entry-copy a.pill:nth-child(2){color:#35283e;border-color:#bbb1c5;text-shadow:0 1px 0 #fff}
+.page:not(.cover-page) .sticker{filter:saturate(.48) drop-shadow(2px 4px 3px #2b1d3566)}

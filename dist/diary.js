@@ -1,41 +1,22 @@
-// photos: {label} renders a placeholder frame; add src:'assets/your-pic.jpg' to show a real photo.
-const entries=[
-{section:'DEAR DIARY',date:'25 SEPT 2026',title:'Dear diary,',burst:'her first<br>page!',sticker:'camera',photos:[{label:'a pic that feels like u',shape:'wide'}],body:`<p>I wanted a little corner of the internet that felt like me.</p><p>Somewhere for work days, side projects, cleaning resets, and the ordinary bits in between.</p><p>So here it is. A place for all of it, even when it doesn’t quite fit into one category.</p><p>Consider this the first page.</p><p class="signoff">Rahaf ♡</p><a href="https://www.tiktok.com/@rka_diaries" target="_blank" rel="noopener noreferrer">The video version lives here ↗</a><br><a href="https://www.instagram.com/rka_diaries/" target="_blank" rel="noopener noreferrer">Photos on Instagram ↗</a>`},
-{section:'EXCLUSIVE',date:'PROJECT NOTES',title:'Too many tabs open.',burst:'4 projects<br>1 girl',sticker:'phone',photos:[{label:'QCapsule'},{label:'RK Techhub'},{label:'DaClimb'}],body:`<p>There’s my work in emerging tech. Then there are all the things I want to build outside of it.</p><p>QCapsule. RK Techhub. DaClimb. And this little diary.</p><p>Different projects, different parts of me. I’m trying to give each one its own time instead of trying to work on everything at once.</p><p class="signoff">One thing at a time.<br>In theory.</p>`},
-{section:'LIFESTYLE',date:'EVERYDAY NOTES',title:'The little resets.',burst:'reset<br>mode: on',sticker:'butterfly',photos:[{label:'ur reset / clean space pic',shape:'tall'}],body:`<p>This page is for the quieter things.</p><p>Getting organised. Cleaning my space. Making room for the week ahead.</p><p>I want the everyday parts to have a place here too. The bits that don’t need a big announcement.</p><p class="signoff">A little reset ♡</p>`},
-{section:'THE WEEK',date:'ROUTINE NOTES',title:'One day, one theme.',burst:'which day<br>are u?',sticker:'cd',photos:[],body:`<p>A home for each of the things I want to make time for.</p><div class="week"><div><b>SUN</b>QCapsule</div><div><b>MON</b>RK Techhub</div><div><b>TUE</b>DaClimb</div><div><b>WED</b>RK Diaries</div><div><b>THU</b>Messages & catching up</div><div><b>FRI</b>Cleaning</div><div><b>SAT</b>Food, fitness & family</div></div><p class="small-note">The idea: fewer decisions about what to work on next.</p>`}
-];
 const $=id=>document.getElementById(id);
 
 const reducedQuery=window.matchMedia('(prefers-reduced-motion: reduce)');
 let book, current=1, saved=null, locked=false, zoomed=false, diaryLocked=true, unlocking=false;
 // Where the key's tip sits inside assets/key.webp, as fractions of its width/height.
 const KEY_TIP={x:.01,y:.46},KEY_INSERT=.3;
-try{const value=localStorage.getItem('rk-diary-sheet');if(value!==null&&Number.isInteger(Number(value))&&Number(value)>0&&Number(value)<7)saved=Number(value);else{const old=localStorage.getItem('rk-diary-bookmark');if(old!==null&&Number.isInteger(Number(old))&&Number(old)>=0&&Number(old)<4)saved=Number(old)+2}}catch{}
-function pagesHTML(){
- const sticker=(name,cls='')=>`<img class="sticker ${cls}" src="assets/sticker-${name}.webp" alt="" aria-hidden="true">`;
- const burst=(html,cls='')=>`<span class="burst ${cls}" aria-hidden="true"><span>${html}</span></span>`;
- const footer=n=>`<div class="page-footer"><span>RK DIARIES ✦ VOL. 01</span><span>${n}</span></div>`;
- const cover=`<article class="page cover-page mag-cover" data-density="hard" aria-label="RK Diaries magazine cover"><div class="page-content cover-content"><div class="cover-art"><img class="cover-photo" src="assets/rahaf-night-out.png" alt="Rahaf in a silver hijab and rhinestone jeans at a party"><div class="cover-strip"><span>VOL. 01</span><span>✦ THE CHAOS ISSUE ✦</span><span>SEPT 2026</span></div><h1 class="masthead">RK<span>diaries</span></h1><div class="coverlines cl-left"><p class="cl cl-big">welcome<br>to the<em>chaos!</em></p><p class="cl"><b>too many tabs</b>4 side projects &amp; 1 diary</p><p class="cl"><b>little resets</b>that keep her sane</p></div><div class="coverlines cl-right"><p class="cl"><b>quiz!</b>which day of her week are u?</p><p class="cl"><b>doha</b>work, life &amp; a lot going on</p></div>${burst('free<br>stickers<br>inside!','cover-burst')}${sticker('disco','cover-disco')}${sticker('star','cover-star')}<div class="cover-bottom"><button class="open-cover" data-open>open the issue ↗</button><span class="barcode" aria-hidden="true"></span></div></div></div></article>`;
- const collage=['purse-sparkle','lipstick','palette','purse-black','heel','platform'].map(name=>sticker(name,`s-${name}`)).join('');
- const contents=`<article class="page chaos-page" aria-label="Welcome to the chaos"><div class="page-content"><div class="page-header"><span class="section-tag">IN THIS ISSUE</span><span>THE INSIDE COVER</span></div><div class="chaos"><figure class="chaos-photo"><img src="assets/rahaf-night-out.png" alt="Rahaf in a silver hijab, white top, and rhinestone jeans at a party"></figure>${collage}<p class="chaos-title">welcome<span>to the chaos</span></p><p class="chaos-note">this diary belongs to <b>Rahaf</b> ♡</p></div>${footer('01')}</div></article>`;
- const photo=p=>`<figure class="snap snap-${p.shape||'square'}${p.src?'':' is-placeholder'}">${p.src?`<img src="${p.src}" alt="${p.alt||p.label}">`:`<div class="ph"><span class="ph-icon" aria-hidden="true">✦</span><span>photo here</span></div>`}<figcaption>${p.label}</figcaption></figure>`;
- const inside=entries.map((e,i)=>`<article class="page entry-page entry-${i}" aria-label="${e.title}"><div class="page-content"><div class="page-header"><span class="section-tag">${e.section}</span><span>${e.date}</span></div><h2>${e.title}</h2>${e.photos.length?`<div class="snaps snaps-${e.photos.length}">${e.photos.map(photo).join('')}</div>`:''}<div class="entry-copy">${e.body}</div>${burst(e.burst)}${sticker(e.sticker,'page-sticker')}${footer('0'+(i+2))}</div></article>`).join('');
- const end=`<article class="page ending-page" aria-label="Until next time"><div class="page-content ending"><div class="page-header"><span class="section-tag">NEXT ISSUE</span><span>COMING SOON</span></div><h2>To be<em>continued…</em></h2>${photo({label:'sneak peek of what’s next',shape:'wide'})}<div class="entry-copy"><p>The everyday bits keep going.</p><div class="pill-links"><a class="pill" href="https://www.tiktok.com/@rka_diaries" target="_blank" rel="noopener noreferrer">watch the video diaries ↗</a><a class="pill" href="https://www.instagram.com/rka_diaries/" target="_blank" rel="noopener noreferrer">follow on instagram ↗</a></div><p class="signoff">Rahaf ♡</p></div>${burst('stay<br>tuned!','end-burst')}${sticker('star','end-star')}${footer('06')}</div></article>`;
- const back=`<article class="page cover-page back-cover" data-density="hard" aria-label="Back cover"><div class="page-content cover-content">${sticker('disco','back-disco')}<p class="masthead">RK<span>diaries</span></p><p class="back-line">see u next issue ♡</p><button class="open-cover" data-page="0">back to the cover ↗</button><span class="barcode" aria-hidden="true"></span></div></article>`;
- return cover+contents+inside+end+back;
-}
-function visiblePages(){const landscape=book.getOrientation()==='landscape';return current===0||current===7||!landscape?[current]:[current,current+1]}
+try{const route=localStorage.getItem('rk-diary-route');const page=routePage(route);if(page>0&&page<BACK_PAGE)saved=page}catch{}
+
+function visiblePages(){const landscape=book.getOrientation()==='landscape';return current===0||current===BACK_PAGE||!landscape?[current]:[current,current+1]}
 function updateUI(){
  current=book.getCurrentPageIndex();const visible=visiblePages();
- $('stage').classList.toggle('is-front',current===0);$('stage').classList.toggle('is-back',current===7);$('stage').classList.toggle('portrait',book.getOrientation()==='portrait');
- $('prev').disabled=current===0;$('next').disabled=current===7;
+ $('stage').classList.toggle('is-front',current===0);$('stage').classList.toggle('is-back',current===BACK_PAGE);$('stage').classList.toggle('portrait',book.getOrientation()==='portrait');
+ $('prev').disabled=current===0;$('next').disabled=current===BACK_PAGE;
  $('next').querySelector('span').textContent=current===0?'open diary':'next';$('next').setAttribute('aria-label',current===0?'Open diary':'Next page');
- $('position').textContent=current===0?'THE COVER':current===7?'THE END':visible.map(x=>String(x).padStart(2,'0')).join(' – ')+' / 06';
- $('close').hidden=current===0;$('bookmark').hidden=current===0||current===7;
+ $('position').textContent=current===0?'THE COVER':current===BACK_PAGE?'THE END':visible.map(x=>String(x).padStart(2,'0')).join(' – ')+' / '+String(BACK_PAGE-1).padStart(2,'0');
+ $('close').hidden=current===0;$('bookmark').hidden=current===0||current===BACK_PAGE;
  const isSaved=saved!==null&&visible.includes(saved);$('bookmark').textContent=isSaved?'♥ page saved':'♡ save page';$('bookmark').setAttribute('aria-pressed',String(isSaved));
  $('bookmark').setAttribute('aria-label',isSaved?'Remove bookmark':'Bookmark this page');$('return-saved').hidden=saved===null||isSaved;
- $('helper').textContent=current===0?(diaryLocked?'This diary is locked… click the key to open it ♡':'Click to open. Then drag a corner to turn the page.'):current===7?'That’s the last page. Head back whenever you like.':'Drag a corner, swipe, or use the arrows to turn a page.';
+ $('helper').textContent=current===0?(diaryLocked?'This diary is locked… click the key to open it ♡':'Click to open. Then drag a corner to turn the page.'):current===BACK_PAGE?'That’s the last page. Head back whenever you like.':'Drag a corner, swipe, or use the arrows to turn a page.';
  document.querySelectorAll('.chapters [data-page]').forEach(button=>{const active=visible.includes(Number(button.dataset.page));button.classList.toggle('active',active);if(active)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current')});
  [...document.querySelectorAll('#book .page')].forEach((page,i)=>{const active=visible.includes(i);page.setAttribute('aria-hidden',String(!active));page.inert=!active});
 }
@@ -142,26 +123,41 @@ function nudgeLock(){
  key.classList.remove('is-nudged');void key.offsetWidth;key.classList.add('is-nudged');
  kickSwing(swingVel>0?-160:160);
 }
-function goTo(index){if(diaryLocked){if(index!==0)unlock(()=>goTo(index));return}if(locked||index<0||index>7)return;if(reducedQuery.matches)book.turnToPage(index);else book.flip(index,'bottom')}
-function next(){if(diaryLocked){unlock(next);return}if(current>=7||locked)return;if(reducedQuery.matches)book.turnToNextPage();else book.flipNext('bottom')}
+function goTo(index){if(diaryLocked){if(index!==0)unlock(()=>goTo(index));return}if(locked||index<0||index>BACK_PAGE)return;if(reducedQuery.matches)book.turnToPage(index);else book.flip(index,'bottom')}
+function next(){if(diaryLocked){unlock(next);return}if(current>=BACK_PAGE||locked)return;if(reducedQuery.matches)book.turnToNextPage();else book.flipNext('bottom')}
 function previous(){if(current===0||locked)return;if(reducedQuery.matches)book.turnToPrevPage();else book.flipPrev('bottom')}
 function createBook(start=0){
  const root=$('book');root.innerHTML=pagesHTML();
- book=new St.PageFlip(root,{width:480,height:680,size:'stretch',minWidth:150,maxWidth:480,minHeight:100,maxHeight:680,showCover:true,startPage:start,usePortrait:false,autoSize:true,drawShadow:true,maxShadowOpacity:.36,flippingTime:1000,mobileScrollSupport:true,useMouseEvents:true,clickEventForward:true,showPageCorners:!reducedQuery.matches,disableFlipByClick:false,swipeDistance:40});
- book.on('flip',event=>{if(diaryLocked&&event.data!==0)finishUnlock();updateUI()});book.on('changeOrientation',()=>{requestAnimationFrame(updateUI)});book.on('changeState',event=>{locked=event.data==='flipping'||event.data==='user_fold';$('stage').classList.toggle('turning',locked)});
+ book=new St.PageFlip(root,{width:480,height:680,size:'stretch',minWidth:150,maxWidth:480,minHeight:100,maxHeight:680,showCover:true,startPage:start,usePortrait:false,autoSize:true,drawShadow:true,maxShadowOpacity:.36,flippingTime:1000,mobileScrollSupport:true,useMouseEvents:true,clickEventForward:true,showPageCorners:!reducedQuery.matches,disableFlipByClick:true,swipeDistance:40});
+ book.on('flip',event=>{if(diaryLocked&&event.data!==0)finishUnlock();updateUI();history.replaceState(null,'',pageRoute(current))});book.on('changeOrientation',()=>{requestAnimationFrame(updateUI)});book.on('changeState',event=>{locked=event.data==='flipping'||event.data==='user_fold';$('stage').classList.toggle('turning',locked)});
  book.loadFromHTML(root.querySelectorAll('.page'));root.append(lockStrap,hangingLock,lockStaple);updateUI();
  root.querySelectorAll('[data-page]').forEach(button=>button.addEventListener('click',()=>goTo(Number(button.dataset.page))));root.querySelector('[data-open]').addEventListener('click',next);
 }
 $('key').addEventListener('click',()=>unlock(next));$('lock-shield').addEventListener('click',nudgeLock);
 $('next').addEventListener('click',next);$('prev').addEventListener('click',previous);$('close').addEventListener('click',()=>goTo(0));$('return-saved').addEventListener('click',()=>{if(saved!==null)goTo(saved)});
 document.querySelectorAll('.chapters [data-page]').forEach(button=>button.addEventListener('click',()=>goTo(Number(button.dataset.page))));
-$('bookmark').addEventListener('click',()=>{saved=saved!==null&&visiblePages().includes(saved)?null:current;try{if(saved===null){localStorage.removeItem('rk-diary-sheet');localStorage.removeItem('rk-diary-bookmark')}else localStorage.setItem('rk-diary-sheet',String(saved))}catch{}updateUI()});
-document.addEventListener('keydown',event=>{if(event.altKey||event.ctrlKey||event.metaKey)return;if(event.key==='ArrowRight'){event.preventDefault();next()}if(event.key==='ArrowLeft'){event.preventDefault();previous()}});
+$('bookmark').addEventListener('click',()=>{saved=saved!==null&&visiblePages().includes(saved)?null:current;try{if(saved===null){localStorage.removeItem('rk-diary-route')}else localStorage.setItem('rk-diary-route',pageRoute(saved))}catch{}updateUI()});
+document.addEventListener('keydown',event=>{if(event.altKey||event.ctrlKey||event.metaKey||event.target.closest('input,select,textarea,[contenteditable]'))return;if(event.key==='ArrowRight'){event.preventDefault();next()}if(event.key==='ArrowLeft'){event.preventDefault();previous()}});
 function fitBook(){const stage=$('stage');const scale=zoomed?1:Math.min(1,stage.clientWidth/960);stage.style.setProperty('--book-scale',scale);stage.style.setProperty('--page-scale',scale);stage.style.setProperty('--reading-width',Math.min(480,stage.clientWidth)+'px');stage.style.height=(680*scale+12)+'px';stage.classList.toggle('zoomed',zoomed);$('zoom').textContent=zoomed?'Fit both pages':'Enlarge book';$('zoom').setAttribute('aria-pressed',String(zoomed));$('zoom').hidden=stage.clientWidth>=960;$('read-left').hidden=!zoomed;$('read-right').hidden=!zoomed;if(book)book.update();}
 $('zoom').addEventListener('click',()=>{zoomed=!zoomed;fitBook();$('stage').scrollLeft=0});
 $('read-left').addEventListener('click',()=>$('stage').scrollTo({left:0,behavior:reducedQuery.matches?'instant':'smooth'}));
 $('read-right').addEventListener('click',()=>$('stage').scrollTo({left:480,behavior:reducedQuery.matches?'instant':'smooth'}));
 window.addEventListener('resize',fitBook);
+document.querySelectorAll('[data-section]').forEach(button=>{button.dataset.page=String(routePage('#'+button.dataset.section));button.addEventListener('click',()=>goTo(Number(button.dataset.page)))});
+const initialRoute=location.hash;
 createBook();
 fitBook();
+function openRoute(){const target=routePage(location.hash);if(target!==null){if(diaryLocked)finishUnlock();goTo(target)}}
+if(initialRoute&&routePage(initialRoute)!==null){finishUnlock();book.turnToPage(routePage(initialRoute))}
+window.addEventListener('hashchange',openRoute);
+document.addEventListener('click',async event=>{
+ const share=event.target.closest('[data-share]');
+ if(share){try{await navigator.clipboard.writeText(new URL('#entry/'+share.dataset.share,location.href).href);share.textContent='Link copied ✓'}catch{share.textContent='Copy the link from your address bar'}return}
+ if(event.target.closest('#reset-archive')){for(const id of ['archive-search','archive-topic','archive-month'])$(id).value='';filterArchive();return}
+ const link=event.target.closest('a[href^="#"]');
+ if(link&&routePage(link.hash)!==null){event.preventDefault();if(locked)return;history.pushState(null,'',link.hash);goTo(routePage(link.hash))}
+});
+$('archive-search').addEventListener('input',filterArchive);
+$('archive-topic').addEventListener('change',filterArchive);
+$('archive-month').addEventListener('change',filterArchive);
 setTimeout(()=>kickSwing(70),900);
