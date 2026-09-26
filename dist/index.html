@@ -5,21 +5,25 @@
 <title>RK Diaries — open my diary</title><meta name="description" content="Rahaf’s little corner of the internet. Flip through notes on work, projects and everyday life in Doha.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%238055b6'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Georgia' font-style='italic' font-size='36' fill='%23ffffff'%3Erk%3C/text%3E%3C/svg%3E">
 <link rel="preload" href="assets/y2k-pinboard.webp" as="image"><link rel="preload" href="assets/violet-glitter.webp" as="image"><link rel="stylesheet" href="style.css">
-<script defer src="vendor/page-flip.browser.js"></script><script defer src="diary.js"></script>
+<script type="importmap">{"imports":{"three":"./vendor/three/three.module.min.js"}}</script><script defer src="vendor/page-flip.browser.js"></script><script defer src="diary.js"></script><script type="module" src="key3d.js"></script>
 </head>
 <body>
-<header class="site-header"><a href="/" class="wordmark">rk <em>diaries</em><span aria-hidden="true">✧</span></a><a class="video-link" href="https://www.tiktok.com/@rka_diaries" target="_blank" rel="noopener noreferrer">the video diaries ↗</a></header>
+<header class="site-header"><a href="/" class="wordmark">rk <em>diaries</em><span aria-hidden="true">✧</span></a><div class="social-links"><a class="video-link" href="https://www.tiktok.com/@rka_diaries" target="_blank" rel="noopener noreferrer">the video diaries ↗</a><a class="video-link" href="https://www.instagram.com/rka_diaries/" target="_blank" rel="noopener noreferrer">@rka_diaries ↗</a></div></header>
 <main>
 <div class="intro-line"><span>RAHAF’S LITTLE CORNER OF THE INTERNET</span><span>VOL. 01 <b aria-hidden="true">✧</b> DOHA</span></div>
-<nav class="chapters" aria-label="Diary chapters"><button data-page="0" class="active">the cover</button><button data-page="2">dear diary</button><button data-page="3">my projects</button><button data-page="4">little resets</button><button data-page="5">the week</button></nav>
-<section class="book-stage" id="stage" aria-label="Interactive diary">
+<nav class="chapters" aria-label="Diary chapters"><button data-page="0" class="active">the cover</button><button data-page="1">the chaos</button><button data-page="2">dear diary</button><button data-page="3">my projects</button><button data-page="4">little resets</button><button data-page="5">the week</button></nav>
+<section class="book-stage is-front" id="stage" aria-label="Interactive diary">
 <div class="book-shell"><div id="book" aria-label="Diary pages"></div></div>
+<div class="lock-strap" id="lock-strap" aria-hidden="true"></div><span class="lock-staple" id="lock-staple" aria-hidden="true"></span>
+<div class="hanging-lock" id="hanging-lock" aria-hidden="true"><div class="lock-swing"><img class="lock-closed" src="assets/lock-closed.webp" alt=""><img class="lock-open" src="assets/lock-open.webp" alt=""><span class="keyhole"></span><span class="lock-sparkle"></span></div></div>
+<div class="lock-shield" id="lock-shield" aria-hidden="true"></div>
+<button class="unlock-key" id="key" aria-label="Unlock the diary with the key"><span class="key-body"><span class="key-tilt"><span class="key-3d"></span></span></span><span class="key-hint">psst… click the key ♡</span></button>
 </section>
 <div class="reader-options"><button id="zoom" aria-pressed="false">Enlarge book</button><button id="read-left" hidden>Read left page</button><button id="read-right" hidden>Read right page</button></div>
 <div class="controls"><button class="chrome-button" id="prev" aria-label="Previous page" disabled>← <span>back</span></button><div class="page-tools"><span id="position" aria-live="polite">THE COVER</span><button id="bookmark" aria-pressed="false" hidden>♡ save page</button></div><button class="chrome-button" id="next" aria-label="Open diary"><span>open diary</span> →</button></div>
 <p class="helper" id="helper">Click to open. Then drag a corner to turn the page.</p>
 <div class="secondary-tools"><button id="close" hidden>close diary</button><button id="return-saved" hidden>return to saved page</button></div>
-<noscript><p class="no-script">Enable JavaScript to flip through the diary. You can also <a href="https://www.tiktok.com/@rka_diaries">watch the video diaries</a>.</p></noscript>
+<noscript><p class="no-script">Enable JavaScript to flip through the diary. You can also <a href="https://www.tiktok.com/@rka_diaries">watch the video diaries</a> or <a href="https://www.instagram.com/rka_diaries/">follow on Instagram</a>.</p></noscript>
 </main>
 <footer><span>RK DIARIES © 2026</span><span>Sample entries · first edition</span></footer>
 </body></html>
